@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.pansoft.logic.entity.User;
-import com.pansoft.logic.service.UserService;
+import com.microfin.logic.entity.User;
+import com.microfin.logic.service.UserService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 // 表示继承了SpringJUnit4ClassRunner类

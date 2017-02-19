@@ -18,19 +18,19 @@
     <mvc:interceptors>
         <mvc:interceptor>
             <mvc:mapping path="/**/*.html*"/>
-            <bean class="com.pansoft.logic.interceptor.LoginHandlerInterceptor"/>
+            <bean class="com.microfin.logic.interceptor.LoginHandlerInterceptor"/>
         </mvc:interceptor>
          <!--<mvc:interceptor>
             <mvc:mapping path="/**/*.html*"/>
-            <bean class="com.pansoft.logic.interceptor.RightsHandlerInterceptor"/>
+            <bean class="com.microfin.logic.interceptor.RightsHandlerInterceptor"/>
         </mvc:interceptor>
         <mvc:interceptor>
             <mvc:mapping path="/**/*"/>
-            <bean class="com.pansoft.logic.interceptor.LoginHandlerInterceptor"/>
+            <bean class="com.microfin.logic.interceptor.LoginHandlerInterceptor"/>
         </mvc:interceptor>
         <mvc:interceptor>
             <mvc:mapping path="/**/*"/>
-            <bean class="com.pansoft.logic.interceptor.RightsHandlerInterceptor"/>
+            <bean class="com.microfin.logic.interceptor.RightsHandlerInterceptor"/>
         </mvc:interceptor> -->
     </mvc:interceptors>
     <!--避免IE执行AJAX时，返回JSON出现下载文件 -->
@@ -61,7 +61,7 @@
     
     <!-- 配置文件上传，如果没有使用文件上传可以不用配置，当然如果不配，那么配置文件中也不必引入上传组件包 -->
     <!-- <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"> -->
-    <bean id="multipartResolver" class="com.pansoft.common.fileHandler.CustomMultipartResolver">
+    <bean id="multipartResolver" class="com.microfin.common.fileHandler.CustomMultipartResolver">
         <!-- 默认编码 -->
         <property name="defaultEncoding" value="utf-8" />
         <!-- 文件大小最大值：100M -->
@@ -73,7 +73,7 @@
     </bean>
     
     <!-- 自定义异常解析器 -->
-    <bean id="exceptionResolver" class="com.pansoft.common.fileHandler.CustomHandlerExceptionResolver" />
+    <bean id="exceptionResolver" class="com.microfin.common.fileHandler.CustomHandlerExceptionResolver" />
     
     
     <!-- 定时任务 -->
@@ -85,7 +85,7 @@
 	
 	<!-- Controller配置 -->
 	<!-- 自动扫描controller -->
-	<!-- <context:component-scan base-package="com.pansoft.logic.controller"></context:component-scan> -->
+	<!-- <context:component-scan base-package="com.microfin.logic.controller"></context:component-scan> -->
 	<!-- task任务扫描注解 -->
 	<task:annotation-driven/>
 </beans>

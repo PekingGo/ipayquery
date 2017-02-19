@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.microfin.logic.dao.UserRoleDao">
+
+    <resultMap type="com.microfin.logic.entity.UserRole" id="userRoleResultMap">
+        <id column="UR_ID" property="ur_id" jdbcType="VARCHAR"/>
+        <result column="U_ACCOUNT" property="u_account" jdbcType="VARCHAR"/>
+        <association property="role" column="R_ID" javaType="com.microfin.logic.entity.Role">
+            <id column="R_ID" property="r_id" jdbcType="VARCHAR"/>
+            <result column="R_NAME" property="r_name" jdbcType="VARCHAR"/>
+            <result column="R_FUNCTION" property="r_function" jdbcType="VARCHAR"/>
+        </association>
+    </resultMap>
+
+    <resultMap type="com.microfin.logic.entity.UserRole" id="roleAndProjectInfoMap">
+        <id column="UR_ID" property="ur_id" jdbcType="VARCHAR"/>
+        <result column="R_ID" property="r_id" jdbcType="VARCHAR"/>
+        <result column="R_NAME" property="r_name" jdbcType="VARCHAR"/>
+        <result column="PROJECT_NO" property="project_no" jdbcType="VARCHAR"/>
+        <result column="PI_NAME" property="pi_name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="getUserRoleList" parameterType="com.microfin.logic.entity.UserRole" resultMap="userRoleResultMap">
+        SELECT
+         UR.UR_ID,
+         UR.U_ACCOUNT,
+         R.R_ID,
+         R.R_NAME,
+         R.R_FUNCTION
+        FROM ECP_USER_ROLE UR
+        LEFT JOIN ECP_ROLE R
+        ON UR.R_ID = R.R_ID
+        WHERE UR.U_ACCOUNT = #{u_account, jdbcType=VARCHAR}
+        AND UR.SYSTEM_ID = #{system_id, jdbcType=VARCHAR}
+    </select>
+    
+    <select id="getRoleInfoList" parameterType="com.microfin.logic.entity.UserRole" resultMap="roleAndProjectInfoMap">
+        SELECT UR.UR_ID, UR.R_ID, R.R_NAME, UR.PROJECT_NO
+          FROM ECP_USER_ROLE UR
+          LEFT JOIN ECP_ROLE R
+            ON UR.R_ID = R.R_ID
+            WHERE UR.U_ACCOUNT = #{u_account, jdbcType=VARCHAR}
+            AND UR.SYSTEM_ID = #{system_id, jdbcType=VARCHAR}
+            ORDER BY R.R_NAME
+    </select>
+
+    <select id="getCountByRoleId" resultType="int">
+        SELECT
+         COUNT(R_ID)
+        FROM ECP_USER_ROLE
+        WHERE R_ID = #{r_id, jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectUserId" parameterType="com.microfin.logic.entity.UserRole" resultType="String">
+        SELECT
+         R_ID
+        FROM ECP_USER_ROLE
+        WHERE U_ACCOUNT = #{u_account, jdbcType=VARCHAR}
+        AND SYSTEM_ID = #{system_id, jdbcType=VARCHAR}
+    </select>
+
+  <insert id="insertRoleData" parameterType="com.microfin.logic.entity.UserRole" >
+      INSERT 
+      INTO ECP_USER_ROLE
+       (UR_ID,U_ACCOUNT,R_ID,CREATE_TIME,CREATE_USER,SYSTEM_ID,PROJECT_NO) 
+      VALUES
+       (#{ur_id, jdbcType=VARCHAR},
+       #{u_account, jdbcType=VARCHAR},
+       #{r_id, jdbcType=VARCHAR},
+       #{create_time, jdbcType=VARCHAR},
+       #{create_user, jdbcType=VARCHAR},
+       #{system_id, jdbcType=VARCHAR},
+       #{project_no, jdbcType=VARCHAR}
+       )
+  </insert>
+
+  <delete id="deleteRole" parameterType="String">
+      DELETE 
+      FROM ECP_USER_ROLE 
+      WHERE UR_ID = #{ur_id, jdbcType=VARCHAR}
+  </delete>
+  
+  <delete id="deleteRoleByAccount" parameterType="String">
+      DELETE 
+      FROM ECP_USER_ROLE 
+      WHERE U_ACCOUNT = 
+      (SELECT
+          U_ACCOUNT
+      FROM
+          ECP_USER
+      WHERE
+          U_ID=#{u_id,jdbcType=VARCHAR}
+      )
+  </delete>
+
+    <select id="getUAccount" resultType="String">
+        SELECT
+         U_ACCOUNT
+        FROM ECP_USER_ROLE
+        WHERE R_ID = #{xzrl, jdbcType=VARCHAR}
+    </select>
+    
+    <select id="isAdmin" resultType="int">
+        SELECT COUNT(*) FROM DUAL 
+		WHERE EXISTS(
+		SELECT * FROM ECP_USER_ROLE UR 
+		JOIN ECP_ROLE R ON UR.R_ID = R.R_ID AND UR.SYSTEM_ID = R.SYSTEM_ID
+		WHERE UR.SYSTEM_ID = 'gkpt' AND R.R_NAME = '管理员' AND UR.U_ACCOUNT = #{userAccount, jdbcType=VARCHAR})
+    </select>
+    <select id="selectUserRoleList" resultType="com.microfin.logic.entity.UserRole">
+        SELECT
+         *
+        FROM ECP_USER_ROLE
+        WHERE U_ACCOUNT = #{u_account, jdbcType=VARCHAR}
+    </select>
+    
+    <select id="getUserRolesByRoleName" resultType="com.microfin.logic.entity.UserRole">
+        SELECT
+        U.*,R.R_NAME
+        FROM ECP_ROLE R JOIN ECP_USER_ROLE U 
+        ON R.R_ID=U.R_ID AND R.SYSTEM_ID = U.SYSTEM_ID 
+        WHERE R.R_NAME = #{roleName, jdbcType=VARCHAR}
+		AND R.SYSTEM_ID = 'gkpt'
+    </select>
+    
+    <select id="isExistRole" parameterType="String" resultType="Boolean">
+        SELECT
+          COUNT(R_ID)
+        FROM ECP_USER_ROLE R
+        WHERE R.PROJECT_NO = #{pro_no, jdbcType=VARCHAR}
+        AND R.SYSTEM_ID = 'gkpt'
+    </select>
+    
+    <select id="selectAministrtor" resultType="Boolean">
+        SELECT
+          COUNT(UR.UR_ID)
+        FROM
+          ECP_USER_ROLE UR
+        LEFT JOIN 
+          ECP_ROLE R
+        ON UR.R_ID = R.R_ID
+        WHERE U_ACCOUNT = #{u_account, jdbcType=VARCHAR}
+        AND
+          R.R_NAME LIKE  '%'||'管理员'||'%'
+    </select>
+</mapper>

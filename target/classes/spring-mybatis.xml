@@ -16,7 +16,7 @@
                         http://www.springframework.org/schema/aop
                         http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
     <!-- 自动扫描 -->
-    <context:component-scan base-package="com.pansoft.logic" />
+    <context:component-scan base-package="com.microfin.logic" />
     <!-- 引入配置文件 -->
     <bean id="propertyConfigurer"
         class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
@@ -48,11 +48,11 @@
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource" />
         <!-- 自动扫描mapping.xml文件 -->
-        <property name="mapperLocations" value="classpath:com/pansoft/logic/mapping/*.xml"></property>
-        <property name="typeAliasesPackage" value="com.pansoft.logic.entity"/>
+        <property name="mapperLocations" value="classpath:com/microfin/logic/mapping/*.xml"></property>
+        <property name="typeAliasesPackage" value="com.microfin.logic.entity"/>
         <property name="plugins">
             <array>
-                <bean class="com.pansoft.common.pageHelper.PageHelper">
+                <bean class="com.microfin.common.pageHelper.PageHelper">
                     <property name="properties">
                         <value>
                             dialect=mysql
@@ -66,7 +66,7 @@
 
     <!-- DAO接口所在包名，Spring会自动查找其下的类 -->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="com.pansoft.logic.dao" />
+        <property name="basePackage" value="com.microfin.logic.dao" />
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
     </bean>
 
