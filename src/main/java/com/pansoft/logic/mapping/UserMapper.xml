@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pansoft.logic.dao.UserDao">
+
+    <resultMap type="com.pansoft.logic.entity.User" id="userResultMap">
+        <id column="u_id" property="u_id" jdbcType="VARCHAR" />
+        <result column="U_ACCOUNT" property="u_account" jdbcType="VARCHAR"/>
+        <result column="U_PASSWORD" property="u_password" jdbcType="VARCHAR"/>
+        <result column="U_NAME" property="u_name" jdbcType="VARCHAR"/>
+        <result column="U_STATUS" property="u_status" jdbcType="VARCHAR"/>
+        <result column="U_REMARKS" property="u_remarks" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="getUserInfo" parameterType="com.pansoft.logic.entity.User" resultMap="userResultMap">
+        SELECT
+         * 
+        FROM ECP_USER 
+        WHERE 1=1
+        <if test="u_account!=null and u_account!=''">
+        AND U_ACCOUNT = #{u_account, jdbcType=VARCHAR}
+        </if>
+        <if test="u_password!=null and u_password!=''">
+        AND U_PASSWORD = #{u_password, jdbcType=VARCHAR}
+        </if>
+        <if test="u_id!=null and u_id!=''">
+        AND U_ID = #{u_id, jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <select id="getStaffList" parameterType="com.pansoft.logic.entity.User" resultMap="userResultMap">
+      SELECT DISTINCT U.U_ACCOUNT, U.U_NAME ,U_ID,U_MOBILE,U_EMAIL
+      FROM ECP_USER U
+      LEFT JOIN ECP_USER_ROLE UR
+      ON U.U_ACCOUNT = UR.U_ACCOUNT
+      AND UR.SYSTEM_ID = #{system_id, jdbcType=VARCHAR}
+      WHERE 1 = 1
+      <if test='u_status=="0"'>
+          AND UR.SYSTEM_ID = #{system_id, jdbcType=VARCHAR}
+      </if>
+      <if test='u_status=="1"'>
+          AND UR.SYSTEM_ID IS NULL
+      </if>
+      <if test="u_account!=null and u_account!=''">
+          AND U.U_ACCOUNT LIKE "%"#{u_account,jdbcType=VARCHAR}"%"
+      </if>
+      <if test="u_name!=null and u_name!=''">
+          AND U.U_NAME LIKE "%"#{u_name,jdbcType=VARCHAR}"%"
+      </if>
+      ORDER BY U.U_ACCOUNT ASC
+    </select>
+
+    <select id="getUMobile" parameterType="String" resultType="String">
+        SELECT U_MOBILE
+        FROM ECP_USER 
+        WHERE U_ACCOUNT = #{u_account, jdbcType=VARCHAR}
+    </select>
+    <select id="getCountByName" parameterType="com.pansoft.logic.entity.User" resultType="int">
+        SELECT 
+            COUNT(U_ID) 
+        FROM 
+            ECP_USER 
+        WHERE 
+            U_ACCOUNT=#{u_account,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteUser" parameterType="String">
+        DELETE 
+            FROM ECP_USER 
+            WHERE U_ID = #{u_id,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insertUser" parameterType="com.pansoft.logic.entity.User">
+        INSERT 
+              ECP_USER (
+                          U_ID,U_ACCOUNT,U_PASSWORD,U_NAME,U_PHONE,U_MOBILE,U_EMAIL,U_WECHAT,U_COMPANY,U_STATUS,CREATE_TIME,CREATE_USER,U_REMARKS
+                         )
+        VALUES
+             (
+               #{u_id,jdbcType=VARCHAR},#{u_account,jdbcType=VARCHAR},#{u_password,jdbcType=VARCHAR},#{u_name,jdbcType=VARCHAR},#{u_phone,jdbcType=VARCHAR},
+               #{u_mobile,jdbcType=VARCHAR},#{u_email,jdbcType=VARCHAR},#{u_wechat,jdbcType=VARCHAR},#{u_company,jdbcType=VARCHAR},#{u_status,jdbcType=VARCHAR},
+               #{create_time,jdbcType=TIMESTAMP},#{create_user,jdbcType=TIMESTAMP},#{u_remarks,jdbcType=TIMESTAMP}
+             )
+    </insert>
+    <update id="updateUserBaseInfo" parameterType="com.pansoft.logic.entity.User">
+        UPDATE 
+           ECP_USER 
+        SET 
+           U_MOBILE = #{u_mobile,jdbcType=VARCHAR},
+           U_EMAIL = #{u_email,jdbcType=VARCHAR}
+        WHERE U_ID=#{u_id,jdbcType=VARCHAR}
+    </update>
+</mapper>
