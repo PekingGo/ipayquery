@@ -8,12 +8,11 @@
 *.iml
 
 # ignore for output file
-/target/*
-/target/class/*
-/target/test-class/*
-*.class
-!/target/class/
-!/target/test-class/
+target/*
+target/class/*
+target/test-class/*
+!target/class/
+!target/test-class/
 
 # ignore for log
 *.log
