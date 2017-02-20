@@ -1,0 +1,16 @@
+# ignore for Eclipse
+.settings
+.project
+.classpath
+
+# ignore for IntelliJ Idea
+.idea
+*.iml
+
+# ignore for output file
+/target/class/*
+/target/test-class/*
+*.class
+
+# ignore for log
+.log
