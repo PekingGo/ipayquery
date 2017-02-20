@@ -17,3 +17,6 @@
 
 # ignore for log
 *.log
+
+# ignore for properties
+jdbc.properties
