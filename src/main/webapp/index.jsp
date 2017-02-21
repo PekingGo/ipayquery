@@ -11,8 +11,6 @@
   </head>
   
   <body>
-    <script type="text/javascript">
-        window.location.replace("login.html");
-    </script>
+     hello world
   </body>
 </html>
