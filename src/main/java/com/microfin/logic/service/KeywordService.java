@@ -1,9 +1,9 @@
 package com.microfin.logic.service;
 
 import java.util.List;
-import java.util.Map;
 
 import com.microfin.logic.entity.Keyword;
+import com.microfin.logic.entity.KeywordTableMap;
 
 public interface KeywordService {
     /**
@@ -11,5 +11,5 @@ public interface KeywordService {
      * @param keyword
      * @return
      */
-    public Map<String, List<Keyword>> query(Keyword keyword);
+    public List<KeywordTableMap> query(Keyword keyword);
 }

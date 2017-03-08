@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.microfin.logic.dao.KeywordDao">
+
+    <resultMap type="com.microfin.logic.entity.KeywordTableMap" id="keyWordTableMap">
+        <id column="table_name"  jdbcType="VARCHAR" property="key" />
+        <collection property="value" javaType="ArrayList" ofType="com.microfin.logic.entity.Keyword" resultMap="keywordMap" /> 
+    </resultMap>
+    <resultMap type="com.microfin.logic.entity.Keyword" id="keywordMap">
+        <result column="p_id" jdbcType="VARCHAR" property="p_id"/>
+        <result column="key_word" jdbcType="VARCHAR" property="key_word"/>
+    </resultMap>
+    <select id="queryNumber" parameterType="com.microfin.logic.entity.Keyword" resultMap="keyWordTableMap">
+        SELECT table_name,p_id,key_word FROM numeric_keyword
+        WHERE 1=1 
+        <if test="key_word !=null and key_word != ''">
+          AND key_word LIKE "%"#{key_word,jdbcType=VARCHAR}"%"
+        </if>
+    </select>
+</mapper>

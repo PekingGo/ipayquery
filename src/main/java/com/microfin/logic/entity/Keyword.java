@@ -11,7 +11,6 @@ public class Keyword implements Serializable {
 
     private String key_word = "";
     private String p_id;
-    private String table_name;
 
     /**
      * @return the key_word
@@ -41,21 +40,6 @@ public class Keyword implements Serializable {
      */
     public void setP_id(String p_id) {
         this.p_id = p_id;
-    }
-
-    /**
-     * @return the table_name
-     */
-    public String getTable_name() {
-        return table_name;
-    }
-
-    /**
-     * @param table_name
-     *            the table_name to set
-     */
-    public void setTable_name(String table_name) {
-        this.table_name = table_name;
     }
 
 }
