@@ -1,29 +1,25 @@
 package com.microfin.logic.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.microfin.logic.dao.BankCardDetailDao;
-import com.microfin.logic.entity.BankCardDetail;
-import com.microfin.logic.service.BankCardDetailService;
+import com.microfin.logic.entity.Keyword;
+import com.microfin.logic.service.WatchService;
 
-@Service
+@Service("t_bank_card_detail")
 @Transactional(readOnly = true)
-public class BankCardDetailServiceImpl implements BankCardDetailService {
+public class BankCardDetailServiceImpl implements WatchService {
     @Autowired
     private BankCardDetailDao bankCardDetailDao;
 
-    /**
-     * 根据输入信息查询银行卡信息
-     */
     @Override
-    public List<BankCardDetail> queryCardInfo(BankCardDetail bankCardDetail) {
-        List<BankCardDetail> list = bankCardDetailDao.queryCardInfo(bankCardDetail);
-        return list == null ? new ArrayList<BankCardDetail>() : list;
+    public void queryForData(Map<String, List<Keyword>> queryMap, Map<String, Object> resultMap) {
+
     }
 
 }
