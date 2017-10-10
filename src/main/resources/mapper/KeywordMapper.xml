@@ -17,5 +17,15 @@
         <if test="key_word !=null and key_word != ''">
           AND key_word LIKE "%"#{key_word,jdbcType=VARCHAR}"%"
         </if>
+        ORDER BY TABLE_NAME,P_ID
+    </select>
+
+    <select id="queryCharacter" parameterType="com.microfin.logic.entity.Keyword" resultMap="keyWordTableMap">
+        SELECT table_name,p_id,key_word FROM character_keyword
+        WHERE 1=1
+        <if test="key_word !=null and key_word != ''">
+            AND key_word LIKE "%"#{key_word,jdbcType=VARCHAR}"%"
+        </if>
+        ORDER BY TABLE_NAME,P_ID
     </select>
 </mapper>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.microfin.logic.dao.BankDetailDao">
+    <select id="query" resultType="com.microfin.logic.entity.BankDetail">
+        SELECT 
+            id,bankDetail,bankNo,address,phoneNo,bankName
+        FROM 
+            T_BANK_DETAIL
+        <where>
+        <if test="_parameter !=null and _parameter != '' ">
+         AND 
+             id LIKE #{id,jdbcType=VARCHAR}
+        </if>
+        </where>
+    </select>
+</mapper>

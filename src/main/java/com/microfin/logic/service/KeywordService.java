@@ -11,5 +11,5 @@ public interface KeywordService {
      * @param keyword
      * @return
      */
-    public List<KeywordTableMap> query(Keyword keyword);
+     List<KeywordTableMap> query(Keyword keyword);
 }

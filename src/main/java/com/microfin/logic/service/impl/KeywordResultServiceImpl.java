@@ -17,7 +17,9 @@ public class KeywordResultServiceImpl implements KeywordResultService {
 
     @Override
     public void addWatchServcie(WatchService queryService) {
-        serviceList.add(queryService);
+        if(!serviceList.contains(queryService)){
+            serviceList.add(queryService);
+        }
     }
 
     @Override
@@ -30,6 +32,11 @@ public class KeywordResultServiceImpl implements KeywordResultService {
         for (WatchService queryService : serviceList) {
             queryService.queryForData(queryMap, returnMap);
         }
+    }
+
+    @Override
+    public void removeAllService() {
+        serviceList.removeAll(serviceList);
     }
 
 }

@@ -13,5 +13,5 @@ public interface KeywordDao {
      */
     public List<KeywordTableMap> queryNumber(Keyword keyword);
 
-    public List<Keyword> queryCharacter(Keyword keyword);
+    public List<KeywordTableMap> queryCharacter(Keyword keyword);
 }

@@ -12,4 +12,6 @@ public interface KeywordResultService {
     public void delWatchService(WatchService queryService);
 
     public void notifyServiceToQuery(Map<String, List<Keyword>> queryMap, Map<String, Object> returnMap);
+
+    public void removeAllService();
 }

@@ -1,12 +1,10 @@
 package com.microfin.logic.dao;
 
-import java.util.List;
-
 import com.microfin.logic.entity.BankCardDetail;
 
 public interface BankCardDetailDao {
 
-    List<BankCardDetail> queryCardInfo(BankCardDetail bankCardDetail);
+    BankCardDetail query(String id);
 
     int queryDataNum(BankCardDetail bankCardDetail);
 

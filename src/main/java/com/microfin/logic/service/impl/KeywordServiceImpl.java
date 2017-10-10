@@ -25,8 +25,8 @@ public class KeywordServiceImpl implements KeywordService {
         if (StringUtil.isNumeric(keyword.getKey_word())) {
             list = keywordDao.queryNumber(keyword);
         } else {
-            // list = keywordDao.queryCharacter(keyword);
-            list = null;
+             list = keywordDao.queryCharacter(keyword);
+//            list = null;
         }
         return list == null ? new ArrayList<KeywordTableMap>() : list;
     }

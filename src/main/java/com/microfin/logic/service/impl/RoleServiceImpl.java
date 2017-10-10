@@ -28,10 +28,11 @@ public class RoleServiceImpl implements RoleService {
     /**
      * 根据角色ID获取角色信息
      *
-     * @param r_name
+     * @param role
      * @return
      */
     /* @Override */
+    @Override
     public Role getRoleById(Role role) {
         return roleDao.getRoleById(role);
     }
@@ -39,10 +40,11 @@ public class RoleServiceImpl implements RoleService {
     /**
      * 根据角色名获取角色信息
      *
-     * @param r_name
+     * @param role
      * @return
      */
     /* @Override */
+    @Override
     public List<Role> getRoleByName(Role role) {
         return roleDao.getRoleByName(role);
     }
@@ -54,6 +56,7 @@ public class RoleServiceImpl implements RoleService {
      * @return
      */
     /* @Override */
+    @Override
     public String getRoleIdByIdAndName(Role role) {
         return roleDao.getRoleIdByIdAndName(role.getSystem_id(), null, role.getR_name());
     }
@@ -64,6 +67,7 @@ public class RoleServiceImpl implements RoleService {
      * @param role
      * @return
      */
+    @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     /* @Override */
     public boolean insertRole(Role role) {
@@ -81,6 +85,7 @@ public class RoleServiceImpl implements RoleService {
      * @param role
      * @return
      */
+    @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     /* @Override */
     public String updateRoleBaseInfo(Role role) {
@@ -118,6 +123,7 @@ public class RoleServiceImpl implements RoleService {
      * @param role
      * @return
      */
+    @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     /* @Override */
     public boolean updateRoleFunction(Role role) {
@@ -138,6 +144,7 @@ public class RoleServiceImpl implements RoleService {
      * @param r_id
      * @return
      */
+    @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     /* @Override */
     public void deleteRoleById(String r_id) {
@@ -146,6 +153,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     /* @Override */
+    @Override
     public List<Role> findAll(String system_id) {
         // TODO Auto-generated method stub
         return roleDao.findAll(system_id);
