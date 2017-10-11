@@ -8,10 +8,10 @@
         FROM 
             T_BANK_DETAIL
         <where>
-        <if test="_parameter !=null and _parameter != '' ">
-         AND 
-             id LIKE #{id,jdbcType=VARCHAR}
-        </if>
+            <if test="_parameter !=null and _parameter != '' ">
+             AND
+                 id LIKE #{id,jdbcType=VARCHAR}
+            </if>
         </where>
     </select>
 </mapper>

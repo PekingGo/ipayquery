@@ -1,12 +1,13 @@
 package com.microfin.logic.controller;
 
 import java.net.URLDecoder;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.servlet.ServletContext;
 
+import com.microfin.logic.entity.QueryResult;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import org.codehaus.jackson.map.util.JSONPObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -61,6 +62,10 @@ public class QueryController {
             if (keywordResult == null) {
                 continue;
             }
+            //当输入key为数字并且长度少于6时一定不是查询银行卡bin或者开户联行号
+            if(StringUtil.isNumeric(key)&&(("t_bank_detail".equals(keywordResult.getKey())&&key.length()<6)||("t_bank_card_detail".equals(keywordResult.getKey())&&key.length()<6))){
+                continue;
+            }
             queryMap.put(keywordResult.getKey(), keywordResult.getValue());
             // 此处前提是把表名对应service的名字用@Service("name")配置成和表名一致
 //            keywordResultService.delWatchService((WatchService) ctx.getBean(keywordResult.getKey()));
@@ -69,9 +74,20 @@ public class QueryController {
         // 查询内容
         returnMap.put("key", key);
         keywordResultService.notifyServiceToQuery(queryMap, returnMap);
-        // returnMap.put(QueryConsts.RESULT,
-        // JSONArray.fromObject(list).toString());
-
+        if(returnMap.get("list")==null){
+            returnMap.put("list",new JSONArray());
+        }
+        JSONArray orginList = JSONArray.fromObject(returnMap.get("list"));
+        //根据更多结果的大小排序，目前算法是认为搜索结果越少越贴近用户想要搜索的内容
+        Collections.sort(orginList, new Comparator<JSONObject>() {
+            @Override
+            public int compare(JSONObject o1, JSONObject o2) {
+                int o1Size = JSONArray.fromObject(o1.get("moreList")).size();
+                int o2Size = JSONArray.fromObject(o2.get("moreList")).size();
+                return o1Size -o2Size;
+            }
+        });
+        returnMap.put("list",orginList);
         return new JSONPObject(jsonpCallback, returnMap);
     }
 
