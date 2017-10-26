@@ -1,9 +1,8 @@
 package com.microfin.logic.service.impl;
 
 import com.microfin.common.util.Properties;
-import com.microfin.common.util.StringUtil;
 import com.microfin.logic.dao.BlackListDao;
-import com.microfin.logic.dao.OrderAcceptOrgDao;
+import com.microfin.logic.dao.ThirdPaymentCompanyDao;
 import com.microfin.logic.entity.*;
 import com.microfin.logic.service.WatchService;
 import net.sf.json.JSONArray;
@@ -15,42 +14,48 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-@Service("t_order_accept_org")
+@Service("t_third_payment_company")
 @Transactional(readOnly = true)
-public class OrderAcceptOrgServiceImpl implements WatchService {
+public class ThirdPaymentCompanyServiceImpl implements WatchService {
     @Autowired
-    private OrderAcceptOrgDao orderAcceptOrgDao;
+    private ThirdPaymentCompanyDao thirdPaymentCompanyDao;
 
     @Override
     public void queryForData(Map<String, List<Keyword>> queryMap, Map<String, Object> resultMap) {
         List<QueryResult> list = new ArrayList<QueryResult>();
-        List<Keyword> queryList = queryMap.get("t_order_accept_org");
+        List<Keyword> queryList = queryMap.get("t_third_payment_company");
         for (int i = 0; i < queryList.size(); i++) {
             Keyword keyword = queryList.get(i);
             QueryResult queryResult = new QueryResult();
             // 输入的查询内容
             queryResult.setKey(resultMap.get("key").toString());
             // 类别
-            String category = Properties.getValue("language-zh-CN", "t_order_accept_org", "");
+            String category = Properties.getValue("language-zh-CN", "t_third_payment_company", "");
             queryResult.setCategory(category);
             // 信息标签
             List<QueryLabel> labelList = new ArrayList<QueryLabel>();
-            OrderAcceptOrg bean = orderAcceptOrgDao.query(keyword.getP_id());
-            queryResult.setKeyword(keyword.getKey_word().length()>13?keyword.getKey_word().substring(0,13)+"..":keyword.getKey_word());
-            QueryLabel label = new QueryLabel("机构号",bean.getOrgNo(),true,true);
-            // 机构号
+            ThirdPaymentCompany bean = thirdPaymentCompanyDao.query(keyword.getP_id());
+            queryResult.setKeyword(keyword.getKey_word().length()>11?keyword.getKey_word().substring(0,11)+"..":keyword.getKey_word());
+            QueryLabel label = new QueryLabel("批次",bean.getLot(),true,true);
+            // 批次
             labelList.add(label);
-            // 地区码
-            if(StringUtil.isNotEmpty(bean.getAddrNo())&&!"0".equals(bean.getAddrNo())){
-                label = new QueryLabel("地区码",bean.getAddrNo(),true,true);
-                labelList.add(label);
-            }
-            // 银行或收单机构名称
-            label = new QueryLabel("机构名称",bean.getBankName(),true,true);
+            // 许可证编号
+            label = new QueryLabel("许可证编号",bean.getLicenseNo(),true,true);
             labelList.add(label);
-            //机构类型
-            label = new QueryLabel("机构类型",bean.getOrgType(),true,false);
+            // 公司名称
+            label = new QueryLabel("公司名称",bean.getCompanyName(),true,true);
             labelList.add(label);
+            // 法人
+            label = new QueryLabel("法人",bean.getLegalPerson(),true,true);
+            labelList.add(label);
+            // 业务类型
+            label = new QueryLabel("业务类型",bean.getServiceType(),true,false);
+            labelList.add(label);
+            // 颁发日期-到期日期
+//            label = new QueryLabel();
+//            label.setText(bean.getIssuingDate()+"-"+bean.getEndDate());
+//            label.setSeen(false);
+//            labelList.add(label);
             queryResult.setInfoArr(labelList);
             if (i == 0) {
                 list.add(queryResult);

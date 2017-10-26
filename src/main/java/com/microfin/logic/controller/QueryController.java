@@ -73,7 +73,10 @@ public class QueryController {
         }
         // 查询内容
         returnMap.put("key", key);
+        long cur =System.currentTimeMillis();
         keywordResultService.notifyServiceToQuery(queryMap, returnMap);
+        long cur1 =System.currentTimeMillis();
+        System.out.println("查询用时："+(cur1-cur)/1000+"s");
         if(returnMap.get("list")==null){
             returnMap.put("list",new JSONArray());
         }
@@ -87,8 +90,19 @@ public class QueryController {
                 return o1Size -o2Size;
             }
         });
+        long cur2 =System.currentTimeMillis();
+        System.out.println("排序用时："+(cur2-cur1)/1000+"s");
+        //将数组索引写入元素对象中
+        for(int i=0;i<orginList.size();i++){
+            JSONObject json = orginList.getJSONObject(i);
+            json.element("index",i);
+        }
+        System.out.println("共计用时："+(System.currentTimeMillis()-cur)/1000+"s");
         returnMap.put("list",orginList);
         return new JSONPObject(jsonpCallback, returnMap);
     }
-
+    @RequestMapping(value = QueryConsts.CATEGORY_QUERY, method = RequestMethod.GET)
+    public @ResponseBody JSONPObject categoryQuery(String key, String jsonpCallback) throws Exception {
+        return  null;
+    }
 }

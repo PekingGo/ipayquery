@@ -21,6 +21,8 @@ public class Const {
 
     /** 不对匹配该值的访问路径拦截（正则） */
     public static final String NO_INTERCEPTOR_PATH = ".*/((login)|(logout)|(code)).*";
+    /** 匹配该值的访问路径拦截（正则）:该路径为查询请求 */
+    public static final String QUERY_INTERCEPTOR_PATH = ".*/((q)|(cq))/*";
 
     /** 标签区分(1:课程) */
     public static final int TAG_KEY_COURSE = 1;

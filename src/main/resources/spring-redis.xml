@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+
+<!-- 引入配置文件 -->
+  <bean id="propertyConfigurer"
+    class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <property name="location" value="classpath:jdbc.properties" />
+  </bean>
+ 
+  <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <property name="maxIdle" value="300" /> <!-- 最大能够保持idel状态的对象数  -->
+        <property name="maxTotal" value="60000" /> <!-- 最大分配的对象数 -->
+        <property name="testOnBorrow" value="true" /> <!-- 当调用borrow Object方法时，是否进行有效性检查 -->
+  </bean>
+  <!-- 采用jedisPool.getResource连接池获取jedis对象进行操作 -->
+  <!-- <bean id="jedisPool" class="redis.clients.jedis.JedisPool">
+        <constructor-arg name="poolConfig" ref="jedisPoolConfig" />
+        <constructor-arg name="host" value="${redis.host}" />
+        <constructor-arg name="port" value="${redis.port}" type="int" />
+        <constructor-arg name="timeout" value="${redis.timeout}" type="int" />
+        <constructor-arg name="password" value="#{'${redis.password}'!=''?'${redis.password}':null}" />
+        <constructor-arg name="database" value="${redis.db.index}" type="int" />
+    </bean> -->
+    <!-- 采用spring-data-redis包下的 JedisConnectionFactory进行redis连接管理-->
+    <bean id="jedisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"> 
+        <property name="hostName" value="${redis.host}" /> 
+        <property name="port" value="${redis.port}"/> 
+        <property name="poolConfig" ref="jedisPoolConfig" /> 
+        <property name="usePool" value="true"/> 
+    </bean> 
+     <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">   
+        <property name="connectionFactory"   ref="jedisConnectionFactory" />   
+        <property name="keySerializer">   
+            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer" />   
+        </property>
+        <property name="valueSerializer">   
+            <bean class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer" />   
+        </property>
+        <property name="hashKeySerializer">     
+           <bean class="org.springframework.data.redis.serializer.StringRedisSerializer"/>     
+        </property>
+        <property name="hashValueSerializer">   
+           <bean class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer"/>     
+        </property> 
+     </bean>
+     <bean id="redisStringTemplate" class="org.springframework.data.redis.core.RedisTemplate">   
+        <property name="connectionFactory"   ref="jedisConnectionFactory" />   
+        <property name="keySerializer">   
+            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer" />   
+        </property>
+        <property name="valueSerializer">   
+            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer" />   
+        </property>
+     </bean>
+</beans>

@@ -27,6 +27,7 @@ public class LoginHandlerInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         // 获取请求信息
         String path = request.getServletPath();
+        System.out.println(request.getParameterMap());
         // 判定请求信息是否合法
         if (path.matches(Const.NO_INTERCEPTOR_PATH)) {
             return true;

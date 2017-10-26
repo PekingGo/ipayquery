@@ -27,7 +27,7 @@ public class PosAnswerMeasureServiceImpl implements WatchService {
         List<QueryResult> list = new ArrayList<QueryResult>();
         List<Keyword> queryList = queryMap.get("t_pos_answer_measure");
         for (int i = 0; i < queryList.size(); i++) {
-            Keyword keyword = queryList.get(0);
+            Keyword keyword = queryList.get(i);
             QueryResult queryResult = new QueryResult();
             // 输入的查询内容
             queryResult.setKey(resultMap.get("key").toString());
@@ -38,32 +38,23 @@ public class PosAnswerMeasureServiceImpl implements WatchService {
             List<QueryLabel> labelList = new ArrayList<QueryLabel>();
             PosAnswerMeasure bean = posAnswerMeasureDao.query(keyword.getP_id());
             queryResult.setKeyword(keyword.getKey_word());
-            QueryLabel label = new QueryLabel();
+            QueryLabel label = new QueryLabel("应答码",bean.getCode(),true,true);
             // 应答码
-            label.setText(bean.getCode());
-            label.setSeen(true);
             labelList.add(label);
             // 应答码含义
-            label = new QueryLabel();
-            label.setText(bean.getMeaning());
-            label.setSeen(true);
+            label = new QueryLabel("应答码含义",bean.getMeaning(),true,true);
             labelList.add(label);
             // 应答码类别
-            label = new QueryLabel();
-            label.setText(bean.getType());
-            label.setSeen(true);
+            label = new QueryLabel("应答码类别",bean.getType(),true,true);
             labelList.add(label);
             //终端显示的内容
             if(StringUtil.isNotEmpty(bean.getDisplaycontent())){
-                label = new QueryLabel();
-                label.setText(bean.getDisplaycontent());
-                label.setSeen(true);
+                label = new QueryLabel("终端显示的内容",bean.getDisplaycontent(),true,true);
                 labelList.add(label);
             }
+            //原因/采取的措施
             if(StringUtil.isNotEmpty(bean.getMeasure())){
-                label = new QueryLabel();
-                label.setText(bean.getMeasure());
-                label.setSeen(false);
+                label = new QueryLabel("原因/采取的措施",bean.getMeasure(),true,false);
                 labelList.add(label);
             }
             queryResult.setInfoArr(labelList);

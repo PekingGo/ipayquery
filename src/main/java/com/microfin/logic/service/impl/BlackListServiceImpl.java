@@ -27,7 +27,7 @@ public class BlackListServiceImpl implements WatchService {
         List<QueryResult> list = new ArrayList<QueryResult>();
         List<Keyword> queryList = queryMap.get("t_black_list");
         for (int i = 0; i < queryList.size(); i++) {
-            Keyword keyword = queryList.get(0);
+            Keyword keyword = queryList.get(i);
             // list.add(bankCardDetailDao.query(keyword.getP_id()));
             QueryResult queryResult = new QueryResult();
             // 输入的查询内容
@@ -38,21 +38,15 @@ public class BlackListServiceImpl implements WatchService {
             // 信息标签
             List<QueryLabel> labelList = new ArrayList<QueryLabel>();
             BlackList bean = blackListDao.query(keyword.getP_id());
-            queryResult.setKeyword(keyword.getKey_word());
-            QueryLabel label = new QueryLabel();
+            queryResult.setKeyword(keyword.getKey_word().length()>11?keyword.getKey_word().substring(0,11)+"..":keyword.getKey_word());
+            QueryLabel label = new QueryLabel("公司名称",bean.getCompany(),true,true);
             // 公司名称
-            label.setText(bean.getCompany());
-            label.setSeen(true);
             labelList.add(label);
             // 是否在黑名单内
-            label = new QueryLabel();
-            label.setText(bean.getInblacklist());
-            label.setSeen(true);
+            label = new QueryLabel("是否在黑名单内",bean.getInblacklist(),true,true);
             labelList.add(label);
             // 发布日期
-            label = new QueryLabel();
-            label.setText(bean.getIssdate());
-            label.setSeen(false);
+            label = new QueryLabel("发布日期",bean.getIssdate(),true,false);
             labelList.add(label);
             queryResult.setInfoArr(labelList);
             if (i == 0) {

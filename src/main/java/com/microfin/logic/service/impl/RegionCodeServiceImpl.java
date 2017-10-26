@@ -25,7 +25,7 @@ public class RegionCodeServiceImpl implements WatchService {
         List<QueryResult> list = new ArrayList<QueryResult>();
         List<Keyword> queryList = queryMap.get("t_code_detail");
         for (int i = 0; i < queryList.size(); i++) {
-            Keyword keyword = queryList.get(0);
+            Keyword keyword = queryList.get(i);
             QueryResult queryResult = new QueryResult();
             // 输入的查询内容
             queryResult.setKey(resultMap.get("key").toString());
@@ -36,20 +36,14 @@ public class RegionCodeServiceImpl implements WatchService {
             List<QueryLabel> labelList = new ArrayList<QueryLabel>();
             RegionCode bean = regionCodeDao.query(keyword.getP_id());
             queryResult.setKeyword(keyword.getKey_word());
-            QueryLabel label = new QueryLabel();
+            QueryLabel label = new QueryLabel("代码",bean.getCode(),true,true);
             // 代码
-            label.setText(bean.getCode());
-            label.setSeen(true);
             labelList.add(label);
             // 地区
-            label = new QueryLabel();
-            label.setText(bean.getAddress());
-            label.setSeen(true);
+            label = new QueryLabel("地区",bean.getAddress(),true,true);
             labelList.add(label);
             // 省市
-            label = new QueryLabel();
-            label.setText(bean.getProvince());
-            label.setSeen(false);
+            label = new QueryLabel("省市",bean.getProvince(),true,false);
             labelList.add(label);
             queryResult.setInfoArr(labelList);
             if (i == 0) {

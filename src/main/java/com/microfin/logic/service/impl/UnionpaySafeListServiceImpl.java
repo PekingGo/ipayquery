@@ -1,9 +1,8 @@
 package com.microfin.logic.service.impl;
 
 import com.microfin.common.util.Properties;
-import com.microfin.common.util.StringUtil;
 import com.microfin.logic.dao.BlackListDao;
-import com.microfin.logic.dao.OrderAcceptOrgDao;
+import com.microfin.logic.dao.UnionpaySafeListDao;
 import com.microfin.logic.entity.*;
 import com.microfin.logic.service.WatchService;
 import net.sf.json.JSONArray;
@@ -15,41 +14,43 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-@Service("t_order_accept_org")
+@Service("t_unionpay_safe_list")
 @Transactional(readOnly = true)
-public class OrderAcceptOrgServiceImpl implements WatchService {
+public class UnionpaySafeListServiceImpl implements WatchService {
     @Autowired
-    private OrderAcceptOrgDao orderAcceptOrgDao;
+    private UnionpaySafeListDao unionpaySafeListDao;
 
     @Override
     public void queryForData(Map<String, List<Keyword>> queryMap, Map<String, Object> resultMap) {
         List<QueryResult> list = new ArrayList<QueryResult>();
-        List<Keyword> queryList = queryMap.get("t_order_accept_org");
+        List<Keyword> queryList = queryMap.get("t_unionpay_safe_list");
         for (int i = 0; i < queryList.size(); i++) {
             Keyword keyword = queryList.get(i);
+            // list.add(bankCardDetailDao.query(keyword.getP_id()));
             QueryResult queryResult = new QueryResult();
             // 输入的查询内容
             queryResult.setKey(resultMap.get("key").toString());
             // 类别
-            String category = Properties.getValue("language-zh-CN", "t_order_accept_org", "");
+            String category = Properties.getValue("language-zh-CN", "t_unionpay_safe_list", "");
             queryResult.setCategory(category);
             // 信息标签
             List<QueryLabel> labelList = new ArrayList<QueryLabel>();
-            OrderAcceptOrg bean = orderAcceptOrgDao.query(keyword.getP_id());
-            queryResult.setKeyword(keyword.getKey_word().length()>13?keyword.getKey_word().substring(0,13)+"..":keyword.getKey_word());
-            QueryLabel label = new QueryLabel("机构号",bean.getOrgNo(),true,true);
-            // 机构号
+            UnionpaySafeList bean = unionpaySafeListDao.query(keyword.getP_id());
+            queryResult.setKeyword(keyword.getKey_word().length()>11?keyword.getKey_word().substring(0,11)+"..":keyword.getKey_word());
+            QueryLabel label = new QueryLabel("省份",bean.getProvince(),true,true);
+            // 省份
             labelList.add(label);
-            // 地区码
-            if(StringUtil.isNotEmpty(bean.getAddrNo())&&!"0".equals(bean.getAddrNo())){
-                label = new QueryLabel("地区码",bean.getAddrNo(),true,true);
-                labelList.add(label);
-            }
-            // 银行或收单机构名称
-            label = new QueryLabel("机构名称",bean.getBankName(),true,true);
+            // 地区
+            label = new QueryLabel("地区",bean.getCity(),true,true);
             labelList.add(label);
-            //机构类型
-            label = new QueryLabel("机构类型",bean.getOrgType(),true,false);
+            // 批发市场名称
+            label = new QueryLabel("批发市场名称",bean.getOrgName(),true,true);
+            labelList.add(label);
+            // 经营范围
+            label = new QueryLabel("经营范围",bean.getBusCategory(),true,true);
+            labelList.add(label);
+            // 批发市场地址
+            label = new QueryLabel("批发市场地址",bean.getAddress(),true,false);
             labelList.add(label);
             queryResult.setInfoArr(labelList);
             if (i == 0) {

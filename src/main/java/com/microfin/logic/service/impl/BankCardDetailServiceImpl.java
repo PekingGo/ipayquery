@@ -29,7 +29,7 @@ public class BankCardDetailServiceImpl implements WatchService {
         List<QueryResult> list = new ArrayList<QueryResult>();
         List<Keyword> queryList = queryMap.get("t_bank_card_detail");
         for (int i = 0; i < queryList.size(); i++) {
-            Keyword keyword = queryList.get(0);
+            Keyword keyword = queryList.get(i);
             QueryResult queryResult = new QueryResult();
             // list.add(bankCardDetailDao.query(keyword.getP_id()));
             // 输入的查询内容
@@ -41,20 +41,14 @@ public class BankCardDetailServiceImpl implements WatchService {
             List<QueryLabel> labelList = new ArrayList<QueryLabel>();
             BankCardDetail bean = bankCardDetailDao.query(keyword.getP_id());
             queryResult.setKeyword(bean.getMainValue());
-            QueryLabel label = new QueryLabel();
+            QueryLabel label = new QueryLabel("发卡行",bean.getOrgName(),true,true);
             // 发卡行
-            label.setText(bean.getOrgName());
-            label.setSeen(true);
             labelList.add(label);
             // 银行卡类型
-            label = new QueryLabel();
-            label.setText(bean.getCardType());
-            label.setSeen(true);
+            label = new QueryLabel("银行卡类型",bean.getCardType(),true,true);
             labelList.add(label);
             // 银行卡名称
-            label = new QueryLabel();
-            label.setText(bean.getCardName());
-            label.setSeen(false);
+            label = new QueryLabel("银行卡名称",bean.getCardName(),true,false);
             labelList.add(label);
             queryResult.setInfoArr(labelList);
             if (i == 0) {
