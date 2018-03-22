@@ -1,0 +1,11 @@
+﻿
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch mxl
+# Changes to be committed:
+#	modified:   main/resources/jdbc.properties
+#	new file:   main/webapp/images/QQ.png
+#	new file:   main/webapp/images/baidu.png
+#	new file:   main/webapp/images/weibo.png
+#
+
