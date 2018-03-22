@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.microfin.logic.dao.CmbcNoScoreDao">
+
+    <select id="queryByCategory" resultType="com.microfin.logic.entity.CmbcNoScore">
+        SELECT 
+            id,companyNo,companyName,score,orgNo,orgName,upTime
+        FROM
+            T_CMBC_NOSCORE
+        WHERE
+         1=1
+        <if test="_parameter !=null and _parameter!=''">
+         AND
+            companyNo = #{companyNo,jdbcType=VARCHAR}
+        </if>
+    </select>
+    
+</mapper>

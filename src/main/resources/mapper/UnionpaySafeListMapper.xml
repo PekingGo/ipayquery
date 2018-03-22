@@ -14,4 +14,14 @@
             </if>
         </where>
     </select>
+    <select id="queryByCategory" resultType="com.microfin.logic.entity.UnionpaySafeList">
+        SELECT
+          province,city,orgName,busCategory,address,manageOrg,certifyDate
+        FROM
+          T_UNIONPAY_SAFE_LIST
+        WHERE
+        1=1
+            AND
+            orgName LIKE "%"#{orgName,jdbcType=VARCHAR}"%"
+    </select>
 </mapper>

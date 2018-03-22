@@ -14,4 +14,21 @@
             </if>
         </where>
     </select>
+    <select id="queryByCategory" resultType="com.microfin.logic.entity.BankDetail">
+        SELECT
+          id,bankDetail,bankNo,address,phoneNo,bankName
+        FROM
+          T_BANK_DETAIL
+        <where>
+            <if test="_parameter !=null and _parameter != '' ">
+                AND
+                (
+                  bankNo LIKE "%"#{key,jdbcType=VARCHAR}"%"
+                OR
+                  bankDetail LIKE "%"#{key,jdbcType=VARCHAR}"%"
+                )
+            </if>
+        </where>
+    </select>
+
 </mapper>

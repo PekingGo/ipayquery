@@ -14,4 +14,14 @@
             </if>
         </where>
     </select>
+    <select id="queryByCategory" resultType="com.microfin.logic.entity.UnionCorp">
+        SELECT
+          id,corp_name,funds,legal,address,contacts_person,contacts,service_type,service_range,reg_date,site
+        FROM
+          T_UNION_CORP
+        <where>
+                AND
+                corp_name LIKE "%"#{corp_name,jdbcType=VARCHAR}"%"
+        </where>
+    </select>
 </mapper>

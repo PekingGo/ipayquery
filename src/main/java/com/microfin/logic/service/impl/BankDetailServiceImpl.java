@@ -1,6 +1,8 @@
 package com.microfin.logic.service.impl;
 
+import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -52,6 +54,8 @@ public class BankDetailServiceImpl implements WatchService {
                 label = new QueryLabel("银行全称",bean.getBankDetail(),true,true);
                 labelList.add(label);
             }
+            label = new QueryLabel("联行号",bean.getBankNo(),true,true);
+            labelList.add(label);
             // 地址
             if (StringUtil.isNotEmpty(bean.getAddress())) {
                 label = new QueryLabel("地址",bean.getAddress(),true,true);
@@ -80,5 +84,68 @@ public class BankDetailServiceImpl implements WatchService {
         }
         long cur2 = System.currentTimeMillis();
         System.out.println("开户行联行号json操作用时："+(cur2-cur1)/1000+"s");
+    }
+
+    /**
+     * 类目查询
+     * @param key
+     * @return
+     */
+    @Override
+    public Map<String,Object> queryByCategory(String key) throws Exception{
+        //map
+        Map<String,Object> map = new HashMap<String, Object>();
+//        key = URLDecoder.decode(key,"UTF-8");
+        List<BankDetail> list = bankDetailDao.queryByCategory(key);
+        //存储list
+        QueryResult resultAll = null;
+        String category = Properties.getValue("language-zh-CN", "t_bank_detail", "开户联行号");
+        if(list!=null&&list.size()>0){
+            resultAll = new QueryResult();
+            int index =0;
+            for(BankDetail bean:list){
+                QueryResult result = new QueryResult();
+                //查询内容
+                result.setKey(key);
+                //类别
+                result.setCategory(category);
+                //关键字
+                result.setKeyword(bean.getBankDetail());
+                //信息标签
+                List<QueryLabel> labelList = new ArrayList<QueryLabel>();
+                QueryLabel label = null;
+                if(StringUtil.isEmpty(bean.getBankName())){
+                    // 所属银行
+                    label = new QueryLabel("所属银行",bean.getBankName(),true,true);
+                    labelList.add(label);
+                }
+                // 银行全称
+                if (StringUtil.isNotEmpty(bean.getBankDetail())) {
+                    label = new QueryLabel("银行全称",bean.getBankDetail(),true,true);
+                    labelList.add(label);
+                }
+                label = new QueryLabel("联行号",bean.getBankNo(),true,true);
+                labelList.add(label);
+                // 地址
+                if (StringUtil.isNotEmpty(bean.getAddress())) {
+                    label = new QueryLabel("地址",bean.getAddress(),true,true);
+                    labelList.add(label);
+                }
+                // 联系电话
+                if (StringUtil.isNotEmpty(bean.getPhoneNo())) {
+                    label = new QueryLabel("联系电话",bean.getPhoneNo(),true,false);
+                    labelList.add(label);
+                }
+                result.setInfoArr(labelList);
+                if(index ==0){
+                    resultAll = result;
+                }else{
+                    resultAll.setMoreList(result);
+                }
+                index++;
+            }
+        }
+        map.put("queryResult",resultAll);
+        return map;
     }
 }

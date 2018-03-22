@@ -30,4 +30,5 @@ public class KeywordServiceImpl implements KeywordService {
         }
         return list == null ? new ArrayList<KeywordTableMap>() : list;
     }
+
 }

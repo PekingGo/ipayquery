@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.microfin.logic.discuzDao.DiscuzArticleDao">
+
+    <select id="queryInfo" parameterType="String" resultType="com.microfin.logic.entity.DiscuzArticle">
+       SELECT
+          aid,author,title,summary,pic
+       FROM pre_portal_article_title
+       where
+          title LIKE "%"#{key,jdbcType=VARCHAR}"%"
+      ORDER  BY  aid DESC
+    </select>
+</mapper>

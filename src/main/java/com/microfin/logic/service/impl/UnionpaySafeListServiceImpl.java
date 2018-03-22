@@ -1,6 +1,7 @@
 package com.microfin.logic.service.impl;
 
 import com.microfin.common.util.Properties;
+import com.microfin.common.util.StringUtil;
 import com.microfin.logic.dao.BlackListDao;
 import com.microfin.logic.dao.UnionpaySafeListDao;
 import com.microfin.logic.entity.*;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -66,5 +68,52 @@ public class UnionpaySafeListServiceImpl implements WatchService {
         } else {
             resultMap.put("list", JSONArray.fromObject(list));
         }
+    }
+    @Override
+    public Map<String,Object> queryByCategory(String key){
+        Map<String,Object> map = new HashMap<String, Object>();
+        List<UnionpaySafeList> list = unionpaySafeListDao.queryByCategory(key);
+        //存储list
+        QueryResult resultAll = null;
+        String category = Properties.getValue("language-zh-CN", "t_third_payment_company", "第三方支付公司");
+        int index = 0;
+        if(list!=null&&list.size()>0){
+            resultAll = new QueryResult();
+            for(UnionpaySafeList bean : list){
+                QueryResult result = new QueryResult();
+                //类目
+                result.setCategory(category);
+                //查询关键字
+                result.setKey(key);
+                //关键字
+                result.setKeyword(bean.getOrgName());
+                //信息标签
+                List<QueryLabel> labelList = new ArrayList<QueryLabel>();
+                QueryLabel label = new QueryLabel("省份",bean.getProvince(),true,true);
+                // 省份
+                labelList.add(label);
+                // 地区
+                label = new QueryLabel("地区",bean.getCity(),true,true);
+                labelList.add(label);
+                // 批发市场名称
+                label = new QueryLabel("批发市场名称",bean.getOrgName(),true,true);
+                labelList.add(label);
+                // 经营范围
+                label = new QueryLabel("经营范围",bean.getBusCategory(),true,true);
+                labelList.add(label);
+                // 批发市场地址
+                label = new QueryLabel("批发市场地址",bean.getAddress(),true,false);
+                labelList.add(label);
+                result.setInfoArr(labelList);
+                if(index ==0){
+                    resultAll = result;
+                }else{
+                    resultAll.setMoreList(result);
+                }
+                index++;
+            }
+        }
+        map.put("queryResult",resultAll);
+        return  map;
     }
 }

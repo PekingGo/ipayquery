@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.microfin.logic.dao.QueryLogDao">
+    <insert id="insert" parameterType="com.microfin.logic.entity.QueryLog">
+        INSERT INTO t_query_log (key_word,category,ip,op_time) VALUES
+          (#{key_word,jdbcType=VARCHAR},#{category,jdbcType=VARCHAR},#{ip,jdbcType=VARCHAR},#{op_time,jdbcType=TIMESTAMP})
+    </insert>
+
+    <select id="query" resultType="java.lang.String">
+        SELECT key_word FROM  hot_keyword
+    </select>
+
+</mapper>

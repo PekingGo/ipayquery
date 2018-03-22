@@ -14,4 +14,16 @@
             </if>
         </where>
     </select>
+    <select id="queryByCategory" resultType="com.microfin.logic.entity.OrderAcceptOrg">
+        SELECT
+          id,orgNo,addrNo,bankName,orgType
+        FROM
+          T_ORDER_ACCEPT_ORG
+        WHERE
+          1=1
+            AND
+              orgNo LIKE "%"#{orgNo,jdbcType=VARCHAR}"%"
+            OR
+              bankName LIKE "%"#{bankName,jdbcType=VARCHAR}"%"
+    </select>
 </mapper>

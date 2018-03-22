@@ -14,4 +14,16 @@
              id = #{id,jdbcType=VARCHAR}
         </if>
     </select>
+    <select id="queryByCategory" resultType="com.microfin.logic.entity.BankCardDetail">
+        SELECT
+        id,orgName,cardName,pos,atm,accountLength,mainAccount,mainValue,cardType
+        FROM
+          T_BANK_CARD_DETAIL
+        WHERE
+          1=1
+        <if test="_parameter !=null and _parameter != ''">
+            AND
+              mainValue LIKE "%"#{mainValue,jdbcType=VARCHAR}"%"
+        </if>
+    </select>
 </mapper>

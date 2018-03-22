@@ -2,6 +2,8 @@ package com.microfin.logic.dao;
 
 import com.microfin.logic.entity.OrderAcceptOrg;
 
+import java.util.List;
+
 /**
 * 收单机构号
 *
@@ -9,4 +11,6 @@ import com.microfin.logic.entity.OrderAcceptOrg;
  */
 public interface OrderAcceptOrgDao {
 	OrderAcceptOrg query(String id);
+
+	List<OrderAcceptOrg> queryByCategory(String key);
 }

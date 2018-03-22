@@ -36,5 +36,9 @@ public class TestMybatis {
         // logger.info("值："+user.getUserName());
         System.out.println(JSONObject.fromObject(user));
         /* logger.info(JSON.toJSONString(user)); */
+
+        JSONObject json = new JSONObject();
+        json.element("key","111");
+
     }
 }

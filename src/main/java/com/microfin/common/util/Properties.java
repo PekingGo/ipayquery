@@ -21,7 +21,6 @@ public class Properties {
 
         // 返回读取指定资源的输入流
         ResourceBundle bundle = ResourceBundle.getBundle(fileName);
-
         return bundle.containsKey(key) ? bundle.getString(key) : def;
     }
 }

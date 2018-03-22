@@ -14,4 +14,16 @@
             </if>
         </where>
     </select>
+    <select id="queryByCategory" resultType="com.microfin.logic.entity.BlackList">
+        SELECT
+          id,company,inblacklist,issdate
+        FROM
+          T_BLACK_LIST
+        WHERE
+          1=1
+        <if test="_parameter !=null and _parameter !=''">
+            AND
+              company LIKE "%"#{company,jdbcType=VARCHAR}"%"
+        </if>
+    </select>
 </mapper>

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -67,5 +68,53 @@ public class UnionCorpServiceImpl implements WatchService {
         } else {
             resultMap.put("list", JSONArray.fromObject(list));
         }
+    }
+    @Override
+    public Map<String,Object> queryByCategory(String key){
+        Map<String,Object> map = new HashMap<String, Object>();
+        List<UnionCorp> list = unionCorpDao.queryByCategory(key);
+        //存储list
+        QueryResult resultAll = null;
+        String category = Properties.getValue("language-zh-CN", "t_third_payment_company", "第三方支付公司");
+        int index = 0;
+        if(list!=null&&list.size()>0){
+            resultAll = new QueryResult();
+            for(UnionCorp bean : list){
+                QueryResult result = new QueryResult();
+                //类目
+                result.setCategory(category);
+                //查询关键字
+                result.setKey(key);
+                //关键字
+                result.setKeyword(bean.getCorp_name());
+                //信息标签
+                List<QueryLabel> labelList = new ArrayList<QueryLabel>();
+                QueryLabel label = new QueryLabel("公司名称",bean.getCorp_name(),true,true);
+                // 公司名称
+                labelList.add(label);
+                // 法人
+                label = new QueryLabel("法人",bean.getLegal(),true,true);
+                labelList.add(label);
+                if(StringUtil.isNotEmpty(bean.getAddress())){
+                    // 营业场所
+                    label = new QueryLabel("营业场所",bean.getAddress(),true,true);
+                    labelList.add(label);
+                }
+                //服务范围
+                if(StringUtil.isNotEmpty(bean.getService_type())){
+                    label = new QueryLabel("服务范围",bean.getService_type(),true,false);
+                    labelList.add(label);
+                }
+                result.setInfoArr(labelList);
+                if(index ==0){
+                    resultAll = result;
+                }else{
+                    resultAll.setMoreList(result);
+                }
+                index++;
+            }
+        }
+        map.put("queryResult",resultAll);
+        return  map;
     }
 }

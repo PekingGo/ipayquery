@@ -14,4 +14,16 @@
             </if>
         </where>
     </select>
+    <select id="queryByCategory" resultType="com.microfin.logic.entity.PosAnswerMeasure">
+        SELECT
+          code,meaning,type,displaycontent,measure
+        FROM
+          T_POS_ANSWER_MEASURE
+        WHERE
+          1=1
+            AND
+              code LIKE "%"#{code,jdbcType=VARCHAR}"%"
+            OR
+              displaycontent LIKE "%"#{displaycontent,jdbcType=VARCHAR}"%"
+    </select>
 </mapper>

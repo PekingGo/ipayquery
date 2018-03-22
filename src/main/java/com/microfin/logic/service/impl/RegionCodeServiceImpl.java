@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -59,5 +60,47 @@ public class RegionCodeServiceImpl implements WatchService {
         } else {
             resultMap.put("list", JSONArray.fromObject(list));
         }
+    }
+    @Override
+    public Map<String,Object> queryByCategory(String key){
+        Map<String,Object> map = new HashMap<String, Object>();
+        List<RegionCode> list = regionCodeDao.queryByCategory(key);
+        //存储list
+        QueryResult resultAll = null;
+        //类目
+        String category = Properties.getValue("language-zh-CN", "t_code_detail", "地区代码");
+        if(list!=null&&list.size()>0){
+            int index =0;
+            resultAll = new QueryResult();
+            for(RegionCode bean : list){
+                QueryResult result = new QueryResult();
+                //类目
+                result.setCategory(category);
+                //查询内容
+                result.setKey(key);
+                //关键字
+                result.setKeyword(bean.getCode());
+                //信息标签
+                List<QueryLabel> labelList = new ArrayList<QueryLabel>();
+                QueryLabel label = new QueryLabel("代码",bean.getCode(),true,true);
+                // 代码
+                labelList.add(label);
+                // 地区
+                label = new QueryLabel("地区",bean.getAddress(),true,true);
+                labelList.add(label);
+                // 省市
+                label = new QueryLabel("省市",bean.getProvince(),true,false);
+                labelList.add(label);
+                result.setInfoArr(labelList);
+                if(index ==0){
+                    resultAll = result;
+                }else{
+                    resultAll.setMoreList(result);
+                }
+                index++;
+            }
+        }
+        map.put("queryResult",resultAll);
+        return  map;
     }
 }

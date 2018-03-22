@@ -1,14 +1,18 @@
 package com.microfin.logic.interceptor;
 
 import com.microfin.common.util.*;
+import com.microfin.logic.entity.QueryLog;
+import com.microfin.logic.service.QueryLogService;
 import net.sf.json.JSONObject;
-import org.codehaus.jackson.map.util.JSONPObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.net.URLDecoder;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  *  查询内容的过滤
@@ -16,7 +20,9 @@ import java.net.URLDecoder;
  *  Author flyman
  */
 public class QueryKeyHandlerInterceptor extends HandlerInterceptorAdapter {
-
+    @Autowired
+    private QueryLogService queryLogService;
+    private ExecutorService exec = Executors.newFixedThreadPool(5);
     /**
      * 对于无效的查询内容统一进行过滤，并对查询内容进行存储
      *
@@ -36,7 +42,7 @@ public class QueryKeyHandlerInterceptor extends HandlerInterceptorAdapter {
             String invalidKey = Properties.getValue("language-zh-CN","invalid_querykey","");
             if(StringUtil.isNotEmpty(key)){
                 key = URLDecoder.decode(key,"UTF-8");
-                if(invalidKey.contains(key)){
+                if(StringUtil.isEmpty(key)||invalidKey.contains(key)){
                     JSONObject result = new JSONObject();
                     result.element("invalid", 1);
                     PrintWriter printWriter = response.getWriter();
@@ -44,7 +50,15 @@ public class QueryKeyHandlerInterceptor extends HandlerInterceptorAdapter {
                     printWriter.close();
                     return false;
                 }else{
-
+                    String catg = request.getParameter("catg");
+                    catg =  URLDecoder.decode(catg,"UTF-8");
+                    final QueryLog logInfo = new QueryLog(key,catg,IPUtil.getIpAddr(request),DateUtil.getCurDate());
+                    exec.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            queryLogService.insert(logInfo);
+                        }
+                    });
                 }
             }else {
                 JSONObject result = new JSONObject();

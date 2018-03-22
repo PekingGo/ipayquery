@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.microfin</groupId>
 	<artifactId>ipayquery</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
     <build>
         <plugins>
             <plugin>
@@ -12,7 +12,8 @@
                 <configuration>
                     <source>1.6</source>
                     <target>1.6</target>
-                </configuration>
+					<skip>true</skip>
+				</configuration>
             </plugin>
         </plugins>
     </build>
@@ -215,5 +216,17 @@
 			<artifactId>spring-data-redis</artifactId>
 			<version>1.6.2.RELEASE</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apdplat</groupId>
+			<artifactId>word</artifactId>
+			<version>1.2</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/commons-httpclient/commons-httpclient -->
+		<dependency>
+			<groupId>commons-httpclient</groupId>
+			<artifactId>commons-httpclient</artifactId>
+			<version>3.0.1</version>
+		</dependency>
+
 	</dependencies>
 </project>

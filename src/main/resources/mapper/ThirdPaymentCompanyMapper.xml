@@ -14,4 +14,14 @@
             </if>
         </where>
     </select>
+    <select id="queryByCategory" resultType="com.microfin.logic.entity.ThirdPaymentCompany">
+        SELECT
+          cid, licenseNo,companyName,legalPerson,companyAddress,province,serviceType,serviceRange,cardOrder,issuingDate,endDate,website,lot,noticesite,renewalInfo
+        FROM
+          T_THIRD_PAYMENT_COMPANY
+        WHERE
+          1=1
+            AND
+            companyName LIKE "%"#{companyName,jdbcType=VARCHAR}"%"
+    </select>
 </mapper>

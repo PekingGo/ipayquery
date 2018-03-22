@@ -13,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -64,8 +66,6 @@ public class MCCDetailServiceImpl implements WatchService {
             if(StringUtil.isNotEmpty(bean.getBusDetail())){
                 // 经营类别详细描述
                 label = new QueryLabel("经营类别详细描述",bean.getBusDetail(),true,true);
-                label.setText(bean.getBusDetail());
-                label.setSeen(true);
                 labelList.add(label);
             }
             // 商户类别名
@@ -92,5 +92,75 @@ public class MCCDetailServiceImpl implements WatchService {
         } else {
             resultMap.put("list", JSONArray.fromObject(list));
         }
+    }
+    @Override
+    public Map<String,Object> queryByCategory(String key) throws Exception{
+        //Map
+        Map<String,Object> map = new HashMap<String, Object>();
+//        key = URLDecoder.decode(key,"UTF-8");
+        List<MCCDetail> list = mccDetailDao.queryByCategory(key);
+        //存储list
+        QueryResult resultAll = null;
+        String category = Properties.getValue("language-zh-CN", "mcc_t", "MCC码扣率");
+        if(list!=null&&list.size()>0){
+            resultAll = new QueryResult();
+            int index =0;
+            for(MCCDetail bean:list){
+                QueryResult result = new QueryResult();
+                //查询内容
+                result.setKey(key);
+                //类别
+                result.setCategory(category);
+                //关键字
+                result.setKeyword(bean.getMccNo());
+                //信息标签
+                List<QueryLabel> labelList = new ArrayList<QueryLabel>();
+                // MCC码
+                QueryLabel label = null;
+                if(StringUtil.isNotEmpty(bean.getMccNo())){
+                    label = new QueryLabel("MCC码",bean.getMccNo(),true,true);
+                    labelList.add(label);
+                }
+                // MCC大类
+                if(StringUtil.isNotEmpty(bean.getType())){
+                    label = new QueryLabel("MCC大类",bean.getType(),true,true);
+                    labelList.add(label);
+                }
+                // MCC小类
+                if(StringUtil.isNotEmpty(bean.getBusType())){
+                    label = new QueryLabel("MCC小类",bean.getBusType(),true,true);
+                    labelList.add(label);
+                }
+                if(StringUtil.isNotEmpty(bean.getTypeDetail())){
+                    // MCC细类
+                    label = new QueryLabel("MCC细类",bean.getTypeDetail(),true,true);
+                    labelList.add(label);
+                }
+                if(StringUtil.isNotEmpty(bean.getBusDetail())){
+                    // 经营类别详细描述
+                    label = new QueryLabel("经营类别详细描述",bean.getBusDetail(),true,true);
+                    labelList.add(label);
+                }
+                // 商户类别名
+                if(StringUtil.isNotEmpty(bean.getBusNameType())){
+                    label = new QueryLabel("商户类别名",bean.getBusNameType(),true,true);
+                    labelList.add(label);
+                }
+                //银联扣率
+                if(StringUtil.isNotEmpty(bean.getPresent())){
+                    label = new QueryLabel("银联扣率",bean.getPresent(),true,false);
+                    labelList.add(label);
+                }
+                result.setInfoArr(labelList);
+                if(index ==0){
+                    resultAll = result;
+                }else{
+                    resultAll.setMoreList(result);
+                }
+                index++;
+            }
+        }
+        map.put("queryResult",resultAll);
+        return map;
     }
 }

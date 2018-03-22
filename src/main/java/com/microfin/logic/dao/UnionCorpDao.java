@@ -2,6 +2,8 @@ package com.microfin.logic.dao;
 
 import com.microfin.logic.entity.UnionCorp;
 
+import java.util.List;
+
 /**
 * 银联认证机构
 *
@@ -9,4 +11,5 @@ import com.microfin.logic.entity.UnionCorp;
  */
 public interface UnionCorpDao {
 	UnionCorp query(String id);
+	List<UnionCorp> queryByCategory(String key);
 }

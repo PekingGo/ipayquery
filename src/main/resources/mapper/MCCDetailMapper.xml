@@ -14,4 +14,28 @@
             </if>
         </where>
     </select>
+    <select id="queryByCategory" resultType="com.microfin.logic.entity.MCCDetail">
+        SELECT
+            A.mccNo,A.busNameType,A.busCategory,A.busType,A.busDetail,B.present,B.type,B.typeDetail
+        FROM
+            T_MCC_DETAIL A
+        LEFT JOIN
+            T_MCC_MAIN B
+        ON
+            A.mccNo = B.mccNO
+        WHERE
+          1=1
+        AND
+        (
+                A.mccNo LIKE "%"#{key,jdbcType=VARCHAR}"%"
+            OR
+                A.busCategory LIKE "%"#{key,jdbcType=VARCHAR}"%"
+            OR
+                A.busNameType LIKE "%"#{key,jdbcType=VARCHAR}"%"
+            OR
+                A.busType LIKE "%"#{key,jdbcType=VARCHAR}"%"
+            OR
+                A.busDetail LIKE "%"#{key,jdbcType=VARCHAR}"%"
+        )
+    </select>
 </mapper>

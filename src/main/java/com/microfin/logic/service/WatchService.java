@@ -13,4 +13,5 @@ import com.microfin.logic.entity.Keyword;
  */
 public interface WatchService {
     public void queryForData(Map<String, List<Keyword>> queryMap, Map<String, Object> resultMap);
+    public Map<String,Object> queryByCategory(String key) throws Exception;
 }

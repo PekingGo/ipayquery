@@ -109,4 +109,37 @@
         <aop:advisor advice-ref="txAdvice" pointcut="execution(* org.snaker.engine.core..*.*(..))"/>
     </aop:config> -->
     <aop:aspectj-autoproxy proxy-target-class="true" />
+
+    <bean id="dataSource2" class="org.apache.commons.dbcp.BasicDataSource"
+          destroy-method="close">
+        <property name="driverClassName" value="${driver2}" />
+        <property name="url" value="${url2}" />
+        <property name="username" value="${username2}" />
+        <property name="password" value="${password2}" />
+        <!-- 初始化连接大小 -->
+        <property name="initialSize" value="${initialSize2}" />
+        <!-- 连接池最大数量 -->
+        <property name="maxActive" value="${maxActive2}" />
+        <!-- 连接池最大空闲 -->
+        <property name="maxIdle" value="${maxIdle2}" />
+        <!-- 连接池最小空闲 -->
+        <property name="minIdle" value="${minIdle2}" />
+        <!-- 获取连接最大等待时间 -->
+        <property name="maxWait" value="${maxWait2}" />
+        <property name="defaultAutoCommit" value="false" />
+        <property name="timeBetweenEvictionRunsMillis" value="3600000" />
+        <property name="minEvictableIdleTimeMillis" value="3600000" />
+    </bean>
+    <bean id="sqlSessionFactory2" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource2" />
+        <property name="mapperLocations" value="classpath:mapperD/*.xml" />
+    </bean>
+    <bean id="transactionManager2" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource2" />
+    </bean>
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.microfin.logic.discuzDao" />
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory2" />
+    </bean>
+    <tx:annotation-driven transaction-manager="transactionManager2" />
 </beans>

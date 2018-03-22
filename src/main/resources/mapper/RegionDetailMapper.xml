@@ -14,4 +14,16 @@
             </if>
         </where>
     </select>
+    <select id="queryByCategory" resultType="com.microfin.logic.entity.RegionCode">
+        SELECT
+          code,address,province
+        FROM
+          T_CODE_DETAIL
+        <where>
+                AND
+                  code LIKE "%"#{code,jdbcType=VARCHAR}"%"
+                OR
+                  address LIKE "%"#{address,jdbcType=VARCHAR}"%"
+        </where>
+    </select>
 </mapper>

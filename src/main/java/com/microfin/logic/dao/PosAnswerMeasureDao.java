@@ -2,6 +2,8 @@ package com.microfin.logic.dao;
 
 import com.microfin.logic.entity.PosAnswerMeasure;
 
+import java.util.List;
+
 /**
 * POS应答码Dao
 *
@@ -9,4 +11,6 @@ import com.microfin.logic.entity.PosAnswerMeasure;
  */
 public interface PosAnswerMeasureDao {
 	PosAnswerMeasure query(String id);
+
+	List<PosAnswerMeasure> queryByCategory(String key);
 }
