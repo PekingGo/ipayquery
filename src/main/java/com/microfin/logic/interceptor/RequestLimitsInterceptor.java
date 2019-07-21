@@ -34,10 +34,10 @@ public class RequestLimitsInterceptor extends HandlerInterceptorAdapter {
         if (mm_count == 1) {
             JedisUtil.expire(mm_key,1, TimeUnit.MINUTES);
         }
-        if (dd_count == 1) {
+        if (hh_count == 1) {
             JedisUtil.expire(hh_key,1, TimeUnit.HOURS);
         }
-        if (mm_count == 1) {
+        if (dd_count == 1) {
             JedisUtil.expire(dd_key,1, TimeUnit.DAYS);
         }
         int mm_limits = Integer.parseInt(Properties.getValue("language-zh-CN","minutes_limits","")),

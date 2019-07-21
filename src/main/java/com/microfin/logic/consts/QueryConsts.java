@@ -1,6 +1,5 @@
 package com.microfin.logic.consts;
 
-import com.microfin.common.util.Properties;
 
 public class QueryConsts {
 
